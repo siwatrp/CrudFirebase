@@ -6,6 +6,7 @@
     android:layout_marginLeft="10dp"
     android:layout_marginTop="15dp"
     android:layout_marginRight="10dp"
+    android:backgroundTint="#00BCD4"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -27,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:text="TextView"
+                android:textColor="#673AB7"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -35,7 +37,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textColor="#121111" />
 
             <TextView
                 android:id="@+id/tvNoHpVal"

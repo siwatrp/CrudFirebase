@@ -1,28 +1,34 @@
-package com.example.belajarsqlite;
+package com.example.crudfirebase;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class MhsModel implements Parcelable {
 
-    int id ;
+  String key;
     String nama ;
     String nim ;
     String noHp ;
 
-    public MhsModel(int id, String nama, String nim, String noHp) {
-        this.id = id;
+    public MhsModel(String key, String nama, String nim, String noHp) {
+        this.key = key;
+        this.nama = nama;
+        this.nim = nim;
+        this.noHp = noHp;
+    }
+    public MhsModel(String nama, String nim, String noHp) {
+
         this.nama = nama;
         this.nim = nim;
         this.noHp = noHp;
     }
 
-    public int getId() {
-        return id;
+    public String getKey() {
+        return key;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getNama() {
@@ -57,24 +63,21 @@ public class MhsModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
+        dest.writeString(this.key);
         dest.writeString(this.nama);
         dest.writeString(this.nim);
         dest.writeString(this.noHp);
     }
 
     public void readFromParcel(Parcel source) {
-        this.id = source.readInt();
+        this.key = source.readString();
         this.nama = source.readString();
         this.nim = source.readString();
         this.noHp = source.readString();
     }
 
-    public MhsModel() {
-    }
-
     protected MhsModel(Parcel in) {
-        this.id = in.readInt();
+        this.key = in.readString();
         this.nama = in.readString();
         this.nim = in.readString();
         this.noHp = in.readString();
@@ -92,3 +95,4 @@ public class MhsModel implements Parcelable {
         }
     };
 }
+

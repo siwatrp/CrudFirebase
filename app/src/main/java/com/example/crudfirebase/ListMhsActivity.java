@@ -1,5 +1,6 @@
-package com.example.belajarsqlite;
+package com.example.crudfirebase;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -39,16 +42,19 @@ public class ListMhsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int item) {
 
-                        DbHelper db = new DbHelper(getApplicationContext());
+                        // DbHelper db = new DbHelper(getApplicationContext());
+                        FirebaseHelper db = new FirebaseHelper();
                         MhsModel mm = mhsList.get(position);
 
                         switch (item){
                             case 0:
-                                boolean stts = db.hapus(mm.getId());
-                                if(stts){
-                                    mhsAdapter.removeItem(position);
-                                    Toast.makeText(getApplicationContext(), "Data berhasil dihapus", Toast.LENGTH_SHORT).show();
-                                }
+                                db.hapus(mm.getKey()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        mhsAdapter.removeItem(position);
+                                        Toast.makeText(getApplicationContext(), "Data berhasil dihapus", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                                 break;
                             case 1:
                                 Intent intent_main = new Intent(ListMhsActivity.this, MainActivity.class);
@@ -76,13 +82,6 @@ public class ListMhsActivity extends AppCompatActivity {
             }
         });
 
-//        if(mhsList.isEmpty()){
-//            mhsList.add("data masih kosong");
-//        }
-
-//        ArrayAdapter<String> ad_nama = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, daftar_nama);
-//
-//        lvNama.setAdapter(ad_nama);
 
     }
 }

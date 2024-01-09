@@ -1,5 +1,6 @@
-package com.example.belajarsqlite;
+package com.example.crudfirebase;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,13 +11,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    /// SAYA MENULIS KOMENTAR DI MAIN ACTIVITY
+
     ArrayList<MhsModel> mhsList ;
     MhsModel mm ;
-    DbHelper db ;
+    //    DbHelper db ;
+    FirebaseHelper db ;
     boolean isEdit ;
 
     @Override
@@ -47,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
             btnSimpan.setText("Edit");
         }
 
-        db = new DbHelper(getApplicationContext());
+        // db = new DbHelper(getApplicationContext());
+        db = new FirebaseHelper();
 
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,30 +70,48 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     // mhsList.add(new MhsModel(-1, isian_nama, isian_nim, isian_hoHp));
 
-
-
-                    boolean stts ;
+                    // boolean stts ;
 
                     if(!isEdit){
-                        mm = new MhsModel(-1, isian_nama, isian_nim, isian_hoHp);
-                        stts = db.simpan(mm);
-
-                        edNama.setText("");
-                        edNim.setText("");
-                        edNoHp.setText("");
+                        // INI LOGIKA SIMPAM
+                        mm = new MhsModel(isian_nama, isian_nim, isian_hoHp);
+                        db.simpan(mm).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(getApplicationContext(), "Data berhasil disimpan", Toast.LENGTH_SHORT).show();
+                                edNama.setText("");
+                                edNim.setText("");
+                                edNoHp.setText("");
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Gagal : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
                     }else{
-                        mm = new MhsModel(mm.getId(), isian_nama, isian_nim, isian_hoHp);
-                        stts = db.ubah(mm);
+                        mm = new MhsModel(mm.getKey(), isian_nama, isian_nim, isian_hoHp);
+                        db.ubah(mm).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(getApplicationContext(), "Data berhasil diubah", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Gagal : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
 
 
-                    if(stts){
-
-                        Toast.makeText(getApplicationContext(), "Data berhasil disimpan", Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(getApplicationContext(), "Data gagal disimpan", Toast.LENGTH_SHORT).show();
-                    }
+//                    if(stts){
+//
+//                        Toast.makeText(getApplicationContext(), "Data berhasil disimpan", Toast.LENGTH_SHORT).show();
+//                    }else{
+//                        Toast.makeText(getApplicationContext(), "Data gagal disimpan", Toast.LENGTH_SHORT).show();
+//                    }
 
 
 
